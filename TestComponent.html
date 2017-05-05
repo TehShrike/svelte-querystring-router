@@ -1,0 +1,29 @@
+<h1>I'm a cool component</h1>
+<p>So I heard you like {{animal}}</p>
+<p>
+	or was it a
+	{{#if querystringParameters.animal === 'cat' }}
+		<Link parameters="{{ {} }}">dog</Link>
+	{{else}}
+		<Link parameters="{{ { animal: 'cat' } }}">cat</Link>
+	{{/if}}
+	?!?!?!?
+</p>
+<p>
+	I'm just a <Link>regular old anchor</Link>.
+</p>
+
+<script>
+const { Link } = require('./test-router-instance')
+
+export default {
+	computed: {
+		animal: querystringParameters => querystringParameters.animal === 'cat'
+			? 'kitties'
+			: 'doggies'
+	},
+	components: {
+		Link
+	}
+}
+</script>

@@ -1,0 +1,48 @@
+{{#if parameters}}
+	<a
+		href="{{querystring}}"
+		class="{{className}}"
+		style="{{style}}"
+		on:click="navigate(event)"
+		ref:link
+	>
+		{{yield}}
+	</a>
+{{else}}
+	<a
+		class="{{className}}"
+		style="{{style}}"
+	>
+		{{yield}}
+	</a>
+{{/if}}
+
+<script>
+export default {
+	data() {
+		return {
+			className: '',
+			style: ''
+		}
+	},
+	computed: {
+		querystring: (parametersToQuerystring, parameters) => {
+			if (!parameters) {
+				return '?'
+			}
+
+			return parametersToQuerystring(parameters)
+		}
+	},
+	methods: {
+		navigate(event) {
+			event.preventDefault()
+
+			this.fire('navigate', {
+				querystring: this.get('querystring'),
+				parameters: this.get('parameters')
+			})
+		}
+	}
+}
+</script>
