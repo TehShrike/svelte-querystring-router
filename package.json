@@ -4,10 +4,11 @@
   "description": "A router that only serializes a small amount of state to the querystring",
   "main": "index.js",
   "scripts": {
-    "test": "npm run build-link && npm run build-test-component && npm run build-test && open test.html",
-    "build-test": "browserify test.js -o test-build.js",
-    "build-test-component": "svelte compile -f cjs TestComponent.html -o test-build-component.js",
-    "build-link": "svelte compile -f cjs Link.html -o link.js"
+    "test": "npm run build-link && npm run build-test-component && npm run build-test && open test-example/test.html",
+    "build-test": "browserify test-example/test.js -o test-example/test-build.js",
+    "build-test-component": "svelte compile -f cjs test-example/TestComponent.html -o test-example/test-build-component.js",
+    "build-link": "svelte compile -f cjs Link.html -o link.js",
+    "build": "npm run build-link"
   },
   "repository": {
     "type": "git",

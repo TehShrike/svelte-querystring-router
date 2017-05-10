@@ -26,13 +26,7 @@ export default {
 		}
 	},
 	computed: {
-		querystring: (parametersToQuerystring, parameters) => {
-			if (!parameters) {
-				return '?'
-			}
-
-			return parametersToQuerystring(parameters)
-		}
+		querystring: (parametersToQuerystring, parameters) => parametersToQuerystring(parameters)
 	},
 	methods: {
 		navigate(event) {
