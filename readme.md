@@ -57,7 +57,7 @@ attachQuerystringData(component) // This keeps querystringParameters updated
 
 # How it works
 
-All clicks in `<Link>` elements are intercepted and turned into [`pushState`](https://developer.mozilla.org/en-US/docs/Web/API/History_API#The_pushState()_method) calls, so that the page doesn't reload on every click.
+Clicks on `<Link>` elements are intercepted and turned into [`pushState`](https://developer.mozilla.org/en-US/docs/Web/API/History_API#The_pushState()_method) calls, so that the page doesn't reload on every click.
 
 Whenever this happens, all the components that you hooked up with `attachQuerystringData()` have their `querystringParameters` data changed - any display values based on that data will change instantly without any page reloading.
 
@@ -73,7 +73,13 @@ Anyway, the instantiated instances come with this API:
 
 ## `Link`
 
-The component to be used in other Svelte components.
+The component to be used in other Svelte components.  Creates an `<a href>` based on the `parameters` you pass in.
+
+Takes these attributes:
+
+- `className`: a string of class names to be applied to the `a` element
+- `style`: a style string to be applied to the `a` element
+- `parameters`: an object of properties to be turned into a querystring link
 
 ## `navigate({ querystring, parameters, element })`
 
