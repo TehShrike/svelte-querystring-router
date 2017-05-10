@@ -1,10 +1,10 @@
 const TestComponent = require('./test-build-component')
-const { attachQuerystringData } = require('./test-router-instance')
+const { attachQuerystringData, getCurrentParameters } = require('../')
 
 const component = new TestComponent({
 	target: document.getElementById('target'),
 	data: {
-		querystringParameters: {}
+		querystringParameters: getCurrentParameters()
 	}
 })
 

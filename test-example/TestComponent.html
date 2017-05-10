@@ -7,14 +7,14 @@
 	{{else}}
 		<Link parameters="{{ { animal: 'cat' } }}">cat</Link>
 	{{/if}}
-	?!?!?!?
+	?
 </p>
 <p>
 	I'm just a <Link>regular old anchor</Link>.
 </p>
 
 <script>
-const { Link } = require('./test-router-instance')
+const { Link } = require('../')
 
 export default {
 	computed: {
