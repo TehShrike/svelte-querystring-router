@@ -19,17 +19,19 @@
 
 <script>
 export default {
-	data() {
+	data: function data() {
 		return {
 			className: '',
 			style: ''
 		}
 	},
 	computed: {
-		querystring: (parametersToQuerystring, parameters) => parametersToQuerystring(parameters)
+		querystring: function (parametersToQuerystring, parameters) {
+			return parametersToQuerystring(parameters)
+		}
 	},
 	methods: {
-		navigate(event) {
+		navigate: function navigate(event) {
 			event.preventDefault()
 
 			this.fire('navigate', {
