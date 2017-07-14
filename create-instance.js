@@ -3,6 +3,10 @@ const EventEmitter = require('eventemitter3')
 
 const Link = require('./link.js')
 
+function defaultReplaceState(state, title, url) {
+	history.replaceState(state, title, url)
+}
+
 function defaultPushState(state, title, url) {
 	history.pushState(state, title, url)
 }
@@ -33,10 +37,12 @@ function optionsWithAugmentedData(options) {
 module.exports = function createRouterInstance(options = {}) {
 	const {
 		pushState,
+		replaceState,
 		currentQuerystring,
 		onPopState
 	} = Object.assign({
 		pushState: defaultPushState,
+		replaceState: defaultReplaceState,
 		currentQuerystring: defaultCurrentQuerystring,
 		onPopState: defaultOnPopState
 	}, options)
@@ -49,7 +55,7 @@ module.exports = function createRouterInstance(options = {}) {
 		emitter.emit('navigate', { querystring, parameters })
 	})
 
-	function navigate({ querystring, parameters, element }) {
+	function navigate({ querystring, parameters, element, replace }) {
 		if (typeof querystring === 'undefined') {
 			querystring = parametersToQuerystring(parameters)
 		}
@@ -63,11 +69,13 @@ module.exports = function createRouterInstance(options = {}) {
 			})
 		}
 
+		const navigateFunction = replace ? replaceState : pushState
+
 		emit('before navigate')
 
 		emit('navigate')
 
-		pushState(parameters, '', querystring)
+		navigateFunction(parameters, '', querystring)
 
 		emit('after navigate')
 	}

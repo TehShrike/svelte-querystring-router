@@ -81,9 +81,11 @@ Takes these attributes:
 - `style`: a style string to be applied to the `a` element
 - `parameters`: an object of properties to be turned into a querystring link
 
-## `navigate({ parameters, [querystring], [element] })`
+## `navigate({ parameters, [querystring], [element], [replace] })`
 
 Causes a `pushState`, and fires a navigate event, updating all attached components.
+
+If `replace` is truthy, then `replaceState` is called instead of `pushState`.
 
 ## `currentQuerystring = getCurrentQuerystring()`
 

@@ -14,9 +14,19 @@
 </p>
 
 <script>
-const { Link } = require('../')
+const { Link, navigate } = require('../')
 
 export default {
+	oncreate() {
+		setTimeout(() => {
+			navigate({
+				parameters: {
+					animal: 'dog'
+				},
+				replace: true
+			})
+		}, 1000)
+	},
 	computed: {
 		animal: querystringParameters => querystringParameters.animal === 'cat'
 			? 'kitties'
