@@ -81,7 +81,7 @@ Takes these attributes:
 - `style`: a style string to be applied to the `a` element
 - `parameters`: an object of properties to be turned into a querystring link
 
-## `navigate({ querystring, parameters, element })`
+## `navigate({ parameters, [querystring], [element] })`
 
 Causes a `pushState`, and fires a navigate event, updating all attached components.
 
