@@ -1,6 +1,6 @@
 {
   "name": "svelte-querystring-router",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A router that only serializes a small amount of state to the querystring",
   "main": "index.js",
   "scripts": {
