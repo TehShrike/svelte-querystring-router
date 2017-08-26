@@ -1,5 +1,5 @@
 const qs = require('query-string')
-const EventEmitter = require('eventemitter3')
+const createEmitter = require('better-emitter')
 
 const Link = require('./link.js')
 
@@ -16,7 +16,7 @@ function defaultCurrentQuerystring() {
 
 	return {
 		querystring,
-		parameters: qs.parse(querystring)
+		parameters: qs.parse(querystring),
 	}
 }
 
@@ -30,7 +30,7 @@ function parametersToQuerystring(parameters) {
 
 function optionsWithAugmentedData(options) {
 	return Object.assign({}, options, {
-		data: Object.assign({}, options.data, { parametersToQuerystring })
+		data: Object.assign({}, options.data, { parametersToQuerystring }),
 	})
 }
 
@@ -39,15 +39,15 @@ module.exports = function createRouterInstance(options = {}) {
 		pushState,
 		replaceState,
 		currentQuerystring,
-		onPopState
+		onPopState,
 	} = Object.assign({
 		pushState: defaultPushState,
 		replaceState: defaultReplaceState,
 		currentQuerystring: defaultCurrentQuerystring,
-		onPopState: defaultOnPopState
+		onPopState: defaultOnPopState,
 	}, options)
 
-	const emitter = new EventEmitter()
+	const emitter = createEmitter()
 	let current = currentQuerystring()
 
 	onPopState(() => {
@@ -65,7 +65,7 @@ module.exports = function createRouterInstance(options = {}) {
 			emitter.emit(event, {
 				querystring,
 				parameters,
-				element
+				element,
 			})
 		}
 
@@ -89,37 +89,34 @@ module.exports = function createRouterInstance(options = {}) {
 				navigate({
 					querystring,
 					parameters,
-					element: linkComponent.refs.link
+					element: linkComponent.refs.link,
 				})
 			})
 
 			return linkComponent
 		},
 		attachQuerystringData(component) {
-			function navigateListener({ parameters }) {
+			const removeListener = emitter.on('navigate', ({ parameters }) => {
 				component.set({
-					querystringParameters: parameters
+					querystringParameters: parameters,
 				})
-			}
-			emitter.on('navigate', navigateListener)
-			component.on('destroy', () => emitter.removeListener('navigate', navigateListener))
+			})
+			component.on('destroy', removeListener)
 			component.set({
-				querystringParameters: current.parameters
+				querystringParameters: current.parameters,
 			})
 		},
 		on(event, listener) {
-			emitter.on(event, listener)
-			return () => emitter.removeListener(event, listener)
+			return emitter.on(event, listener)
 		},
 		once(event, listener) {
-			emitter.once(event, listener)
-			return () => emitter.removeListener(event, listener)
+			return emitter.once(event, listener)
 		},
 		getCurrentQuerystring() {
 			return current.querystring
 		},
 		getCurrentParameters() {
 			return current.parameters
-		}
+		},
 	}
 }
