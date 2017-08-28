@@ -3,7 +3,7 @@
 		href="{{querystring}}"
 		class="{{className}}"
 		style="{{style}}"
-		on:click="navigate(event)"
+		on:click="onClick(event)"
 		ref:link
 	>
 		{{yield}}
@@ -18,6 +18,8 @@
 {{/if}}
 
 <script>
+var shouldInterceptClick = require('click-should-be-intercepted-for-navigation')
+
 export default {
 	data: function data() {
 		return {
@@ -31,13 +33,15 @@ export default {
 		}
 	},
 	methods: {
-		navigate: function navigate(event) {
-			event.preventDefault()
+		onClick: function onClick(event) {
+			if (shouldInterceptClick(event)) {
+				event.preventDefault()
 
-			this.fire('navigate', {
-				querystring: this.get('querystring'),
-				parameters: this.get('parameters')
-			})
+				this.fire('navigate', {
+					querystring: this.get('querystring'),
+					parameters: this.get('parameters')
+				})
+			}
 		}
 	}
 }
