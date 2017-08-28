@@ -48,7 +48,6 @@ module.exports = function createRouterInstance(options = {}) {
 	}, options)
 
 	const emitter = createEmitter()
-	let current = currentQuerystring()
 
 	onPopState(() => {
 		const { querystring, parameters } = currentQuerystring()
@@ -59,7 +58,6 @@ module.exports = function createRouterInstance(options = {}) {
 		if (typeof querystring === 'undefined') {
 			querystring = parametersToQuerystring(parameters)
 		}
-		current = { querystring, parameters }
 
 		function emit(event) {
 			emitter.emit(event, {
@@ -103,7 +101,7 @@ module.exports = function createRouterInstance(options = {}) {
 			})
 			component.on('destroy', removeListener)
 			component.set({
-				querystringParameters: current.parameters,
+				querystringParameters: currentQuerystring().parameters,
 			})
 		},
 		on(event, listener) {
@@ -113,10 +111,10 @@ module.exports = function createRouterInstance(options = {}) {
 			return emitter.once(event, listener)
 		},
 		getCurrentQuerystring() {
-			return current.querystring
+			return currentQuerystring().querystring
 		},
 		getCurrentParameters() {
-			return current.parameters
+			return currentQuerystring().parameters
 		},
 	}
 }
