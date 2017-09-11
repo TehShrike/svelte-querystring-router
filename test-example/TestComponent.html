@@ -1,5 +1,8 @@
 <h1>I'm a cool component</h1>
+<Link parameters="{{ {} }}" anchor="whatever">dog whatever</Link>
+<br /><br />
 <p>So I heard you like {{animal}}</p>
+<br /><br />
 <p>
 	or was it a
 	{{#if querystringParameters.animal === 'cat' }}
@@ -9,9 +12,12 @@
 	{{/if}}
 	?
 </p>
+<br /><br />
 <p>
 	I'm just a <Link>regular old anchor</Link>.
 </p>
+<a id="whatever">WHATEVER</a>
+<br /><br /><br /><br />
 
 <script>
 const { Link, navigate } = require('../')

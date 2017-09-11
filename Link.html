@@ -1,6 +1,6 @@
 {{#if parameters}}
 	<a
-		href="{{querystring}}"
+		href="{{querystring}}{{hash}}"
 		class="{{className}}"
 		style="{{style}}"
 		on:click="onClick(event)"
@@ -26,11 +26,15 @@ export default {
 			className: '',
 			style: '',
 			meta: null,
+			anchor: '',
 		}
 	},
 	computed: {
 		querystring: function (parametersToQuerystring, parameters) {
 			return parametersToQuerystring(parameters)
+		},
+		hash: function(anchor) {
+			return anchor ? '#' + anchor : ''
 		}
 	},
 	methods: {
@@ -42,6 +46,7 @@ export default {
 					querystring: this.get('querystring'),
 					parameters: this.get('parameters'),
 					meta: this.get('meta'),
+					hash: this.get('hash'),
 				})
 			}
 		}

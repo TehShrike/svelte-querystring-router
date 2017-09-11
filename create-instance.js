@@ -35,6 +35,10 @@ function optionsWithAugmentedData(options) {
 	})
 }
 
+const currentAnchor = () => window.location.hash.replace(/^#/, '')
+const scrollToElement = element => element && element.scrollIntoView()
+const getElementById = id => id && document.getElementById(id)
+
 module.exports = function createRouterInstance(options = {}) {
 	const {
 		pushState,
@@ -61,7 +65,7 @@ module.exports = function createRouterInstance(options = {}) {
 	onPopState(handleExternalNavigation)
 	onPushOrReplaceState(handleExternalNavigation)
 
-	function navigate({ querystring, parameters, element, meta, replace }) {
+	function navigate({ querystring, parameters, element, meta, replace, hash = '' }) {
 		if (typeof querystring === 'undefined') {
 			querystring = parametersToQuerystring(parameters)
 		}
@@ -82,7 +86,12 @@ module.exports = function createRouterInstance(options = {}) {
 		emit('navigate')
 
 		navigating = true
-		navigateFunction(parameters, '', querystring)
+		const startAnchor = currentAnchor()
+		navigateFunction(parameters, '', querystring + hash)
+		const newAnchor = currentAnchor()
+		if (startAnchor !== newAnchor) {
+			scrollToElement(getElementById(newAnchor))
+		}
 		navigating = false
 
 		emit('after navigate')
@@ -93,12 +102,13 @@ module.exports = function createRouterInstance(options = {}) {
 		Link: function linkProxy(options) {
 			const linkComponent = new Link(optionsWithAugmentedData(options))
 
-			linkComponent.on('navigate', ({ querystring, parameters, meta }) => {
+			linkComponent.on('navigate', ({ querystring, parameters, meta, hash }) => {
 				navigate({
 					querystring,
 					parameters,
 					meta,
 					element: linkComponent.refs.link,
+					hash,
 				})
 			})
 
