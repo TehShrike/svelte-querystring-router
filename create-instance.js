@@ -76,6 +76,7 @@ module.exports = function createRouterInstance(options = {}) {
 				parameters,
 				meta,
 				element,
+				hash,
 			})
 		}
 
