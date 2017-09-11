@@ -54,7 +54,7 @@ module.exports = function createRouterInstance(options = {}) {
 		emitter.emit('navigate', { querystring, parameters })
 	})
 
-	function navigate({ querystring, parameters, element, replace }) {
+	function navigate({ querystring, parameters, element, meta, replace }) {
 		if (typeof querystring === 'undefined') {
 			querystring = parametersToQuerystring(parameters)
 		}
@@ -63,6 +63,7 @@ module.exports = function createRouterInstance(options = {}) {
 			emitter.emit(event, {
 				querystring,
 				parameters,
+				meta,
 				element,
 			})
 		}
@@ -83,10 +84,11 @@ module.exports = function createRouterInstance(options = {}) {
 		Link: function linkProxy(options) {
 			const linkComponent = new Link(optionsWithAugmentedData(options))
 
-			linkComponent.on('navigate', ({ querystring, parameters }) => {
+			linkComponent.on('navigate', ({ querystring, parameters, meta }) => {
 				navigate({
 					querystring,
 					parameters,
+					meta,
 					element: linkComponent.refs.link,
 				})
 			})

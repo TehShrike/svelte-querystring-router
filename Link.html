@@ -24,7 +24,8 @@ export default {
 	data: function data() {
 		return {
 			className: '',
-			style: ''
+			style: '',
+			meta: null,
 		}
 	},
 	computed: {
@@ -39,7 +40,8 @@ export default {
 
 				this.fire('navigate', {
 					querystring: this.get('querystring'),
-					parameters: this.get('parameters')
+					parameters: this.get('parameters'),
+					meta: this.get('meta'),
 				})
 			}
 		}
