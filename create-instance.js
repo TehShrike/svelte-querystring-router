@@ -89,7 +89,7 @@ module.exports = function createRouterInstance(options = {}) {
 		const startAnchor = currentAnchor()
 		navigateFunction(parameters, '', querystring + hash)
 		const newAnchor = currentAnchor()
-		if (startAnchor !== newAnchor) {
+		if (newAnchor && startAnchor !== newAnchor) {
 			scrollToElement(getElementById(newAnchor))
 		}
 		navigating = false
