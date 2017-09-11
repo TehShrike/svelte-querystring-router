@@ -1,5 +1,6 @@
 const qs = require('query-string')
 const createEmitter = require('better-emitter')
+const onPushOrReplaceState = require('./on-browser-state')
 
 const Link = require('./link.js')
 
@@ -49,10 +50,16 @@ module.exports = function createRouterInstance(options = {}) {
 
 	const emitter = createEmitter()
 
-	onPopState(() => {
-		const { querystring, parameters } = currentQuerystring()
-		emitter.emit('navigate', { querystring, parameters })
-	})
+	let navigating = false
+	const handleExternalNavigation = () => {
+		if (!navigating) {
+			const { querystring, parameters } = currentQuerystring()
+			emitter.emit('navigate', { querystring, parameters })
+		}
+	}
+
+	onPopState(handleExternalNavigation)
+	onPushOrReplaceState(handleExternalNavigation)
 
 	function navigate({ querystring, parameters, element, meta, replace }) {
 		if (typeof querystring === 'undefined') {
@@ -74,7 +81,9 @@ module.exports = function createRouterInstance(options = {}) {
 
 		emit('navigate')
 
+		navigating = true
 		navigateFunction(parameters, '', querystring)
+		navigating = false
 
 		emit('after navigate')
 	}
