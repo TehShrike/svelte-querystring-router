@@ -35,7 +35,9 @@ function optionsWithAugmentedData(options) {
 	})
 }
 
-const currentAnchor = () => window.location.hash.replace(/^#/, '')
+const stripOctothorpe = str => str.replace(/^#/, '')
+const stripQuestionMark = str => str.replace(/^\?/, '')
+const currentAnchor = () => stripOctothorpe(window.location.hash)
 const scrollToElement = element => element && element.scrollIntoView()
 const getElementById = id => id && document.getElementById(id)
 
@@ -87,11 +89,17 @@ module.exports = function createRouterInstance(options = {}) {
 		emit('navigate')
 
 		navigating = true
+		const { querystring: startQuerystring } = currentQuerystring()
+
 		const startAnchor = currentAnchor()
-		navigateFunction(parameters, '', querystring + hash)
-		const newAnchor = currentAnchor()
-		if (newAnchor && startAnchor !== newAnchor) {
-			scrollToElement(getElementById(newAnchor))
+		if (stripQuestionMark(startQuerystring) !== stripQuestionMark(querystring)) {
+			navigateFunction(parameters, '', querystring + hash)
+		} else if (stripOctothorpe(hash) !== currentAnchor()) {
+			pushState(parameters, '', hash)
+		}
+
+		if (currentAnchor() !== startAnchor) {
+			scrollToElement(getElementById(stripOctothorpe(hash)))
 		}
 		navigating = false
 
