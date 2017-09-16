@@ -1,5 +1,5 @@
 function callHistoryMethod(method, state, title, url) {
-	method.apply(window.history, state, title, url)
+	method.call(window.history, state, title, url)
 }
 
 module.exports = function setUpListener(cb) {
