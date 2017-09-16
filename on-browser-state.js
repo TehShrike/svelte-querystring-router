@@ -1,16 +1,18 @@
-const callHistoryMethod = (method, ...args) => method.apply(window.history, args)
+function callHistoryMethod(method, state, title, url) {
+	method.apply(window.history, state, title, url)
+}
 
 module.exports = function setUpListener(cb) {
-	const originalPushState = window.history.pushState
-	const originalReplaceState = window.history.replaceState
+	var originalPushState = window.history.pushState
+	var originalReplaceState = window.history.replaceState
 
-	window.history.replaceState = (...args) => {
-		callHistoryMethod(originalReplaceState, ...args)
+	window.history.replaceState = function(state, title, url) {
+		callHistoryMethod(originalReplaceState, state, title, url)
 		cb()
 	}
 
-	window.history.pushState = (...args) => {
-		callHistoryMethod(originalPushState, ...args)
+	window.history.pushState = function(state, title, url) {
+		callHistoryMethod(originalPushState, state, title, url)
 		cb()
 	}
 }
