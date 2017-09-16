@@ -1,8 +1,8 @@
-const qs = require('query-string')
-const createEmitter = require('better-emitter')
-const onPushOrReplaceState = require('./on-browser-state')
+import qs from 'query-string'
+import createEmitter from 'better-emitter'
+import onPushOrReplaceState from './on-browser-state'
 
-const Link = require('./link.js')
+import Link from './link.html'
 
 function defaultReplaceState(state, title, url) {
 	history.replaceState(state, title, url)
@@ -41,7 +41,7 @@ const currentAnchor = () => stripOctothorpe(window.location.hash)
 const scrollToElement = element => element && element.scrollIntoView()
 const getElementById = id => id && document.getElementById(id)
 
-module.exports = function createRouterInstance(options = {}) {
+export default function createRouterInstance(options = {}) {
 	const {
 		pushState,
 		replaceState,

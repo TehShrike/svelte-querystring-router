@@ -18,10 +18,10 @@
 {{/if}}
 
 <script>
-var shouldInterceptClick = require('click-should-be-intercepted-for-navigation')
+import shouldInterceptClick from 'click-should-be-intercepted-for-navigation'
 
 export default {
-	data: function data() {
+	data() {
 		return {
 			className: '',
 			style: '',
@@ -30,23 +30,25 @@ export default {
 		}
 	},
 	computed: {
-		querystring: function (parametersToQuerystring, parameters) {
+		querystring(parametersToQuerystring, parameters) {
 			return parametersToQuerystring(parameters)
 		},
-		hash: function(anchor) {
+		hash(anchor) {
 			return anchor ? '#' + anchor : ''
 		}
 	},
 	methods: {
-		onClick: function onClick(event) {
+		onClick(event) {
 			if (shouldInterceptClick(event)) {
 				event.preventDefault()
 
+				const { querystring, parameters, meta, hash } = this.get()
+
 				this.fire('navigate', {
-					querystring: this.get('querystring'),
-					parameters: this.get('parameters'),
-					meta: this.get('meta'),
-					hash: this.get('hash'),
+					querystring,
+					parameters,
+					meta,
+					hash,
 				})
 			}
 		}

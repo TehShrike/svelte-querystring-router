@@ -1,5 +1,7 @@
-const TestComponent = require('./test-build-component')
-const { attachQuerystringData, getCurrentParameters } = require('../')
+import TestComponent from './TestComponent.html'
+import instance from '../'
+
+const { attachQuerystringData, getCurrentParameters } = instance
 
 const component = new TestComponent({
 	target: document.getElementById('target'),

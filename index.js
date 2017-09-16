@@ -1,1 +1,3 @@
-module.exports = require('./create-instance.js')()
+import createInstance from './create-instance.js'
+
+export default createInstance()
