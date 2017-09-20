@@ -2,7 +2,7 @@ import qs from 'query-string'
 import createEmitter from 'better-emitter'
 import onPushOrReplaceState from './on-browser-state'
 
-import Link from './link.html'
+import Link from './Link.html'
 
 function defaultReplaceState(state, title, url) {
 	history.replaceState(state, title, url)
