@@ -2,7 +2,7 @@
   "name": "svelte-querystring-router",
   "version": "1.6.1",
   "description": "A router that only serializes a small amount of state to the querystring",
-  "main": "bundle.js",
+  "main": "browser-entry-point.js",
   "scripts": {
     "test": "npm run build && npm run build-test && open test-example/test.html",
     "build-test": "rollup -c -i test-example/test.js -o test-example/test-build.js -f iife",

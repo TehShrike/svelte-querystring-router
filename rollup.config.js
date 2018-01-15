@@ -4,11 +4,11 @@ import babel from 'rollup-plugin-babel'
 import svelte from 'rollup-plugin-svelte'
 
 export default {
-	name: 'svelteQuerystringRouter',
-	input: './index.js',
+	name: `svelteQuerystringRouter`,
+	input: `./create-instance.js`,
 	output: {
-		file: './bundle.js',
-		format: 'cjs',
+		file: `./create-instance-bundle.js`,
+		format: `cjs`,
 	},
 	sourcemap: true,
 	plugins: [
@@ -18,18 +18,18 @@ export default {
 			browser: true,
 		}),
 		babel({
-			exclude: 'node_modules/**',
+			exclude: `node_modules/**`,
 			babelrc: false,
 			presets: [
 				[
-					'es2015',
+					`es2015`,
 					{
 						modules: false,
 					},
 				],
 			],
 			plugins: [
-				'external-helpers',
+				`external-helpers`,
 			],
 		}),
 	],
