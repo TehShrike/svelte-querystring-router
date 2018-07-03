@@ -21,13 +21,13 @@ To use the Link component in your components:
 
 ```html
 <p>
-	You can totally click <Link parameters="{{ { thingy: 'yes' } }}">this</Link>
+	You can totally click <Link parameters="{ { thingy: 'yes' } }">this</Link>
 </p>
-{{#if querystringParameters.thingy === 'yes'}}
+{#if querystringParameters.thingy === 'yes'}
 <p>
 	Aw, yeah.
 </p>
-{{/if}}
+{/if}
 
 <script>
 const { Link } = require('svelte-querystring-router')

@@ -1,21 +1,21 @@
-{{#if parameters}}
+{#if parameters}
 	<a
-		href="{{querystring}}{{hash}}"
-		class="{{className}}"
-		style="{{style}}"
+		href="{querystring}{hash}"
+		class="{className}"
+		style="{style}"
 		on:click="onClick(event)"
 		ref:link
 	>
-		{{yield}}
+		<slot></slot>
 	</a>
-{{else}}
+{:else}
 	<a
-		class="{{className}}"
-		style="{{style}}"
+		class="{className}"
+		style="{style}"
 	>
-		{{yield}}
+		<slot></slot>
 	</a>
-{{/if}}
+{/if}
 
 <script>
 import shouldInterceptClick from 'click-should-be-intercepted-for-navigation'
@@ -30,10 +30,10 @@ export default {
 		}
 	},
 	computed: {
-		querystring(parametersToQuerystring, parameters) {
+		querystring({ parametersToQuerystring, parameters }) {
 			return parametersToQuerystring(parameters)
 		},
-		hash(anchor) {
+		hash({ anchor }) {
 			return anchor ? '#' + anchor : ''
 		}
 	},
