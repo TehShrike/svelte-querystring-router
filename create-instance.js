@@ -1,6 +1,6 @@
 import qs from 'query-string'
 import createEmitter from 'better-emitter'
-import onPushOrReplaceState from './on-browser-state'
+import defaultOnPushOrReplaceState from './on-browser-state'
 
 import Link from './Link.html'
 
@@ -22,11 +22,11 @@ function defaultCurrentQuerystring() {
 }
 
 function defaultOnPopState(listener) {
-	window.addEventListener('popstate', listener)
+	window.addEventListener(`popstate`, listener)
 }
 
 function parametersToQuerystring(parameters) {
-	return '?' + qs.stringify(parameters)
+	return `?` + qs.stringify(parameters)
 }
 
 function optionsWithAugmentedData(options) {
@@ -35,8 +35,8 @@ function optionsWithAugmentedData(options) {
 	})
 }
 
-const stripOctothorpe = str => str.replace(/^#/, '')
-const stripQuestionMark = str => str.replace(/^\?/, '')
+const stripOctothorpe = str => str.replace(/^#/, ``)
+const stripQuestionMark = str => str.replace(/^\?/, ``)
 const currentAnchor = () => stripOctothorpe(window.location.hash)
 const scrollToElement = element => element && element.scrollIntoView()
 const getElementById = id => id && document.getElementById(id)
@@ -47,11 +47,13 @@ export default function createRouterInstance(options = {}) {
 		replaceState,
 		currentQuerystring,
 		onPopState,
+		onPushOrReplaceState,
 	} = Object.assign({
 		pushState: defaultPushState,
 		replaceState: defaultReplaceState,
 		currentQuerystring: defaultCurrentQuerystring,
 		onPopState: defaultOnPopState,
+		onPushOrReplaceState: defaultOnPushOrReplaceState,
 	}, options)
 
 	const emitter = createEmitter()
@@ -60,15 +62,15 @@ export default function createRouterInstance(options = {}) {
 	const handleExternalNavigation = () => {
 		if (!navigating) {
 			const { querystring, parameters } = currentQuerystring()
-			emitter.emit('navigate', { querystring, parameters })
+			emitter.emit(`navigate`, { querystring, parameters })
 		}
 	}
 
 	onPopState(handleExternalNavigation)
 	onPushOrReplaceState(handleExternalNavigation)
 
-	function navigate({ querystring, parameters, element, meta, replace, hash = '' }) {
-		if (typeof querystring === 'undefined') {
+	function navigate({ querystring, parameters, element, meta, replace, hash = `` }) {
+		if (typeof querystring === `undefined`) {
 			querystring = parametersToQuerystring(parameters)
 		}
 
@@ -84,18 +86,18 @@ export default function createRouterInstance(options = {}) {
 
 		const navigateFunction = replace ? replaceState : pushState
 
-		emit('before navigate')
+		emit(`before navigate`)
 
-		emit('navigate')
+		emit(`navigate`)
 
 		navigating = true
 		const { querystring: startQuerystring } = currentQuerystring()
 
 		const startAnchor = currentAnchor()
 		if (stripQuestionMark(startQuerystring) !== stripQuestionMark(querystring)) {
-			navigateFunction(parameters, '', querystring + hash)
+			navigateFunction(parameters, ``, querystring + hash)
 		} else if (stripOctothorpe(hash) !== currentAnchor()) {
-			pushState(parameters, '', hash)
+			pushState(parameters, ``, hash)
 		}
 
 		if (currentAnchor() !== startAnchor) {
@@ -103,7 +105,7 @@ export default function createRouterInstance(options = {}) {
 		}
 		navigating = false
 
-		emit('after navigate')
+		emit(`after navigate`)
 	}
 
 	return {
@@ -111,7 +113,7 @@ export default function createRouterInstance(options = {}) {
 		Link: function linkProxy(options) {
 			const linkComponent = new Link(optionsWithAugmentedData(options))
 
-			linkComponent.on('navigate', ({ querystring, parameters, meta, hash }) => {
+			linkComponent.on(`navigate`, ({ querystring, parameters, meta, hash }) => {
 				navigate({
 					querystring,
 					parameters,
@@ -124,12 +126,12 @@ export default function createRouterInstance(options = {}) {
 			return linkComponent
 		},
 		attachQuerystringData(component) {
-			const removeListener = emitter.on('navigate', ({ parameters }) => {
+			const removeListener = emitter.on(`navigate`, ({ parameters }) => {
 				component.set({
 					querystringParameters: parameters,
 				})
 			})
-			component.on('destroy', removeListener)
+			component.on(`destroy`, removeListener)
 			component.set({
 				querystringParameters: currentQuerystring().parameters,
 			})
