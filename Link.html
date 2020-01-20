@@ -1,10 +1,44 @@
+<script>
+	import shouldInterceptClick from 'click-should-be-intercepted-for-navigation'
+	import { createEventDispatcher } from 'svelte'
+
+	const dispatch = createEventDispatcher()
+	export let parametersToQuerystring = null
+
+	export let className = ''
+	export let style = ''
+	export let meta = null
+
+	export let anchor = ''
+	export let parameters = {}
+
+	let element = null
+
+	export let currentQuerystring = () => ({ querystring: ``, parameters: {} })
+	$: querystring = parametersToQuerystring(parameters)
+	$: hash = anchor ? '#' + anchor : ''
+
+	const onClick = event => {
+		if (shouldInterceptClick(event)) {
+			event.preventDefault()
+
+			dispatch('navigate', {
+				querystring,
+				parameters,
+				meta,
+				hash,
+			})
+		}
+	}
+</script>
+
 {#if parameters}
 	<a
 		href="{querystring}{hash}"
 		class="{className}"
 		style="{style}"
-		on:click="onClick(event)"
-		ref:link
+		on:click="{onClick}"
+		bind:this={element}
 	>
 		<slot></slot>
 	</a>
@@ -17,41 +51,3 @@
 	</a>
 {/if}
 
-<script>
-import shouldInterceptClick from 'click-should-be-intercepted-for-navigation'
-
-export default {
-	data() {
-		return {
-			className: '',
-			style: '',
-			meta: null,
-			anchor: '',
-		}
-	},
-	computed: {
-		querystring({ parametersToQuerystring, parameters }) {
-			return parametersToQuerystring(parameters)
-		},
-		hash({ anchor }) {
-			return anchor ? '#' + anchor : ''
-		}
-	},
-	methods: {
-		onClick(event) {
-			if (shouldInterceptClick(event)) {
-				event.preventDefault()
-
-				const { querystring, parameters, meta, hash } = this.get()
-
-				this.fire('navigate', {
-					querystring,
-					parameters,
-					meta,
-					hash,
-				})
-			}
-		}
-	}
-}
-</script>

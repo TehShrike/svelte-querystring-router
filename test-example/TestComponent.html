@@ -1,3 +1,25 @@
+<script>
+	import instance from '../'
+	import { onMount } from 'svelte'
+
+	export let querystringParameters = {}
+
+	$: animal = querystringParameters.animal === 'cat'
+		? 'kitties'
+		: 'doggies'
+
+	const { Link, navigate } = instance
+
+	setTimeout(() => {
+		navigate({
+			parameters: {
+				animal: 'dog'
+			},
+			replace: true
+		})
+	}, 1000)
+</script>
+
 <h1>I'm a cool component</h1>
 <Link parameters="{ {} }" anchor="whatever">dog whatever</Link>
 <br /><br />
@@ -19,28 +41,3 @@
 <a id="whatever">WHATEVER</a>
 <br /><br /><br /><br />
 
-<script>
-import instance from '../'
-const { Link, navigate } = instance
-
-export default {
-	oncreate() {
-		setTimeout(() => {
-			navigate({
-				parameters: {
-					animal: 'dog'
-				},
-				replace: true
-			})
-		}, 1000)
-	},
-	computed: {
-		animal: ({ querystringParameters }) => querystringParameters.animal === 'cat'
-			? 'kitties'
-			: 'doggies'
-	},
-	components: {
-		Link
-	}
-}
-</script>

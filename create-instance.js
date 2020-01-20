@@ -31,7 +31,7 @@ function parametersToQuerystring(parameters) {
 
 function optionsWithAugmentedData(options) {
 	return Object.assign({}, options, {
-		data: Object.assign({}, options.data, { parametersToQuerystring }),
+		props: Object.assign({}, options.props, { parametersToQuerystring })
 	})
 }
 
@@ -113,12 +113,12 @@ export default function createRouterInstance(options = {}) {
 		Link: function linkProxy(options) {
 			const linkComponent = new Link(optionsWithAugmentedData(options))
 
-			linkComponent.on(`navigate`, ({ querystring, parameters, meta, hash }) => {
+			linkComponent.$on(`navigate`, ({ detail: { querystring, parameters, meta, hash, element } }) => {
 				navigate({
 					querystring,
 					parameters,
 					meta,
-					element: linkComponent.refs.link,
+					element,
 					hash,
 				})
 			})
@@ -127,12 +127,17 @@ export default function createRouterInstance(options = {}) {
 		},
 		attachQuerystringData(component) {
 			const removeListener = emitter.on(`navigate`, ({ parameters }) => {
-				component.set({
+				component.$set({
 					querystringParameters: parameters,
 				})
 			})
-			component.on(`destroy`, removeListener)
-			component.set({
+			// const originalDestroy = component.$destroy
+			// component.$destroy = function(...args) {
+			// 	removeListener()
+			// 	originalDestroy.apply(this, args)
+			// }
+
+			component.$set({
 				querystringParameters: currentQuerystring().parameters,
 			})
 		},
